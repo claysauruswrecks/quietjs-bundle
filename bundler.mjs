@@ -90,21 +90,21 @@ async function bundle() {
   log("Bundling...");
 
   let code = [
-    `let mem=${bufferToLiteral(requirements.quietEsMem)}`,
+    `let mem=${bufferToLiteral(requirements.quietEsMem)};`,
     replaceFunctionBody(
       requirements.quietBase,
       "setProfilesPrefix",
-      `onProfilesFetch(${"`" + requirements.quietProfiles + "`"})`
+      `onProfilesFetch(${"`" + requirements.quietProfiles + "`"});`
     ),
-    `Quiet.init({profilesPrefix: 'https://quiet.github.io/quiet-js/javascripts/', memoryInitializerPrefix: 'https://quiet.github.io/quiet-js/javascripts/'})`,
+    `Quiet.init({profilesPrefix: 'https://quiet.github.io/quiet-js/javascripts/', memoryInitializerPrefix: 'https://quiet.github.io/quiet-js/javascripts/'});`,
     replaceFunctionBody(
       requirements.quietEs,
       'Module["readAsync"]',
       "onload(mem);"
     ),
-    `Quiet.Module=Module`,
-    `module.exports=Quiet`,
-  ].join(";\n");
+    `Quiet.Module=Module;`,
+    `module.exports=Quiet;`,
+  ].join("\n");
 
   const profileNames = Object.keys(JSON.parse(requirements.quietProfiles));
   log(
@@ -120,7 +120,7 @@ async function bundle() {
   );
 
   await fsWriteFile("_bundle.js", code);
-  log(chalk.greenBright("Finished ! Module ready to use !"));
+  log(chalk.greenBright("Finished! Module ready to use!"));
 }
 
 bundle().catch((e) => {
